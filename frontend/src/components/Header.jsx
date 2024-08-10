@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { FaArrowRight } from 'react-icons/fa'; // Importing icons
+import { FaArrowRight, FaUserCircle } from 'react-icons/fa'; // Import user icon
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link and useNavigate for navigation
 import { assets } from '../assets/assets'; // Importing assets
 
-const Header = () => {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate(); // Hook to programmatically navigate
     const location = useLocation(); // Hook to get current location
@@ -15,6 +15,15 @@ const Header = () => {
     const handleNavigation = (path) => {
         setDropdownOpen(false); // Close dropdown
         navigate(path); // Navigate to the specified path
+    };
+
+    const handleLoginClick = () => {
+        navigate('/login'); // Navigate to login page
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false); // Update login state
+        navigate('/'); // Redirect to home or login page
     };
 
     const getLinkClassName = (path) => {
@@ -98,10 +107,23 @@ const Header = () => {
                                 </div>
                             )}
                         </div>
-                        <button className="flex items-center px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
-                            Join Now
-                            <FaArrowRight className="ml-2" />
-                        </button>
+                        {isLoggedIn ? (
+                            <button 
+                                onClick={handleLogout} 
+                                className="flex items-center px-4 py-2 text-white bg-gray-700 rounded hover:bg-gray-800"
+                            >
+                                <FaUserCircle className="mr-2" />
+                                Profile
+                            </button>
+                        ) : (
+                            <button 
+                                onClick={handleLoginClick}
+                                className="flex items-center px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                            >
+                                Join Now
+                                <FaArrowRight className="ml-2" />
+                            </button>
+                        )}
                     </nav>
                 </div>
             </header>

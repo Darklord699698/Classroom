@@ -1,50 +1,40 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import Footer from './components/Footer'; // Import the Footer component
-import Content from './components/Content'; // Import the Content component
-import About from './components/About'; // Import the About component
+import Footer from './components/Footer';
+import Content from './components/Content';
+import About from './components/About';
 import PrincipalView from './components/Principalview';
 import TeacherView from './components/Teacherview';
 import StudentView from './components/Studentview';
 import Courses from './components/Courses';
 import Pages from './components/Pages';
 import Contact from './components/Contact';
+import Login from './components/Login';
+import Register from './components/Register';
 
 const App = () => {
-    const [showPrincipalView, setShowPrincipalView] = useState(false);
-
-    const handleHomeClick = () => {
-        setShowPrincipalView(false);
-    };
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return (
         <Router>
             <div className="flex flex-col min-h-screen App">
-                <Header showPrincipalView={showPrincipalView} setShowPrincipalView={setShowPrincipalView} />
+                <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
                 <main className="flex-grow">
                     <Routes>
                         <Route path="/" element={<Content />} />
-                        <Route path="/principal" element={
-                            <div>
-                                <button 
-                                    className="absolute z-50 text-2xl text-white top-16 right-4"
-                                    onClick={() => setShowPrincipalView(false)}
-                                >
-                                    &times;
-                                </button>
-                                <PrincipalView />
-                            </div>
-                        } />
+                        <Route path="/principal" element={<PrincipalView />} />
                         <Route path="/teacher" element={<TeacherView />} />
                         <Route path="/student" element={<StudentView />} />
-                        <Route path="/about" element={<About />} /> 
-                        <Route path="/courses" element={<Courses />} /> 
-                        <Route path="/pages" element={<Pages />} /> 
-                        <Route path="/contact" element={<Contact />} /> 
+                        <Route path="/about" element={<About />} />
+                        <Route path="/courses" element={<Courses />} />
+                        <Route path="/pages" element={<Pages />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+                        <Route path="/register" element={<Register />} />
                     </Routes>
                 </main>
-                <Footer /> {/* Include the Footer component */}
+                <Footer />
             </div>
         </Router>
     );
