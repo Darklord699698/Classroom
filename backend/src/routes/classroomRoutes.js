@@ -34,31 +34,22 @@ router.post('/', async (req, res) => {
 // Assign a teacher to a classroom
 router.post('/assign', async (req, res) => {
     const { teacherId, classroomId } = req.body;
+
     try {
-        const teacher = await Teacher.findById(teacherId);
-        const classroom = await Classroom.findById(classroomId);
-
-        if (!teacher || !classroom) {
-            return res.status(404).json({ message: 'Teacher or Classroom not found' });
-        }
-
+        // Check if the teacher is already assigned to another classroom
         const existingAssignment = await Classroom.findOne({ teacher: teacherId });
         if (existingAssignment) {
             return res.status(400).json({ message: 'Teacher is already assigned to another classroom' });
         }
 
+        // Proceed with assigning the teacher to the new classroom
+        const classroom = await Classroom.findById(classroomId);
         classroom.teacher = teacherId;
         await classroom.save();
 
-        teacher.classroom = classroomId;
-        await teacher.save();
-
-        const updatedClassroom = await Classroom.findById(classroomId).populate('teacher');
-
-        res.status(200).json(updatedClassroom);
+        res.status(200).json({ message: 'Teacher assigned to classroom successfully' });
     } catch (error) {
-        console.error('Error assigning teacher to classroom:', error);
-        res.status(500).json({ message: 'Error assigning teacher to classroom', error: error.message });
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

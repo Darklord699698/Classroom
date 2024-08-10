@@ -105,14 +105,14 @@ const PrincipalView = () => {
                 alert('Teacher assigned to classroom successfully.');
             }
         } catch (error) {
-            console.error('Error assigning classroom:', error.response ? error.response.data : error.message);
-            alert('Failed to assign teacher: ' + (error.response ? error.response.data.message : error.message));
+            const errorMessage = error.response && error.response.data ? error.response.data.message : error.message;
+            console.error('Error assigning classroom:', errorMessage);
+            alert('Failed to assign teacher: ' + errorMessage);
         }
     };
 
     const handleAssignStudent = async () => {
         try {
-            console.log('Assigning student with studentId:', selectedStudent, 'and teacherId:', selectedTeacher);
             const response = await axios.post('http://localhost:4000/api/students/assign', {
                 studentId: selectedStudent,
                 teacherId: selectedTeacher
@@ -124,8 +124,9 @@ const PrincipalView = () => {
                 alert('Student assigned to teacher successfully.');
             }
         } catch (error) {
-            console.error('Error assigning student:', error.response ? error.response.data : error.message);
-            alert('Failed to assign student: ' + (error.response ? error.response.data.message : error.message));
+            const errorMessage = error.response && error.response.data ? error.response.data.message : error.message;
+            console.error('Error assigning student:', errorMessage);
+            alert('Failed to assign student: ' + errorMessage);
         }
     };
 

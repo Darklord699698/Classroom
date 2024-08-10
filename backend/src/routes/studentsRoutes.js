@@ -111,4 +111,37 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Assign student to a teacher
+router.post('/assign', async (req, res) => {
+    const { studentId, teacherId } = req.body;
+
+    try {
+        // Validate studentId
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(400).json({ message: 'Invalid student ID' });
+        }
+
+        // Validate teacherId
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(400).json({ message: 'Invalid teacher ID' });
+        }
+
+        // Check if the teacher is already assigned to another student
+        const existingStudent = await Student.findOne({ teacherId: teacherId });
+        if (existingStudent) {
+            return res.status(400).json({ message: 'Teacher is already assigned to another student' });
+        }
+
+        // Assign student to teacher
+        student.teacherId = teacherId;
+        await student.save();
+
+        res.status(200).json({ message: 'Student assigned to teacher successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error assigning student', error: error.message });
+    }
+});
+
 export default router;
