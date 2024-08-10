@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Lottie from 'lottie-react'; // Import Lottie for animations
 import { assets } from '../assets/assets'; // Import the assets with Lottie file
+import axios from 'axios'; // Import axios for making HTTP requests
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const Contact = () => {
         mobile: '',
         message: ''
     });
+    const [status, setStatus] = useState(''); // State to show success or error messages
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,10 +20,20 @@ const Contact = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission logic
-        console.log('Form submitted:', formData);
+        try {
+            const response = await axios.post('http://localhost:4000/api/contact', formData);
+            setStatus('Form submitted successfully!');
+            setFormData({
+                name: '',
+                email: '',
+                mobile: '',
+                message: ''
+            });
+        } catch (error) {
+            setStatus('Failed to submit the form.');
+        }
     };
 
     return (
@@ -71,6 +83,7 @@ const Contact = () => {
                         Send Response
                     </button>
                 </form>
+                {status && <p className="mt-4 text-white">{status}</p>}
                 <div className="flex justify-center w-full mt-8">
                     <Lottie animationData={assets.animation2} loop={true} />
                 </div>

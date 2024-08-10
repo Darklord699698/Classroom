@@ -6,6 +6,7 @@ import classroomRoutes from './src/routes/classroomRoutes.js';
 import timetableRoutes from './src/routes/timetableRoutes.js';
 import studentRoutes from './src/routes/studentsRoutes.js';
 import teacherRoutes from './src/routes/teacherRoutes.js';
+import contactRoutes from './src/routes/contactRoutes.js'; // Import the new contact routes
 
 // App configuration
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/classrooms', classroomRoutes); // Classroom operations
 app.use('/api/timetable', timetableRoutes);  // Timetable operations
 app.use('/api/students', studentRoutes);      // Student operations
 app.use('/api/teachers', teacherRoutes);      // Teacher operations
+app.use('/api/contact', contactRoutes);        // New route for contact form
 
 // 404 Handler for unknown routes
 app.use((req, res, next) => {
