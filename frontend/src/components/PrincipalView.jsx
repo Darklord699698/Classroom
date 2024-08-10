@@ -9,9 +9,13 @@ const PrincipalView = () => {
     const [newClassroomName, setNewClassroomName] = useState('');
     const [selectedTeacher, setSelectedTeacher] = useState('');
     const [selectedClassroom, setSelectedClassroom] = useState('');
+    const [selectedStudent, setSelectedStudent] = useState('');
     const [timetable, setTimetable] = useState({});
     const [newTeacherName, setNewTeacherName] = useState('');
     const [newTeacherEmail, setNewTeacherEmail] = useState('');
+    const [newStudentName, setNewStudentName] = useState('');
+    const [newStudentEmail, setNewStudentEmail] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         fetchTeachers();
@@ -48,11 +52,13 @@ const PrincipalView = () => {
 
     const handleCreateClassroom = async () => {
         try {
-            await axios.post('http://localhost:4000/api/classrooms', { name: newClassroomName });
+            console.log('Creating classroom with name:', newClassroomName); // Log payload
+            const response = await axios.post('http://localhost:4000/api/classrooms', { name: newClassroomName });
             setNewClassroomName('');
-            fetchClassrooms();
+            fetchClassrooms(); // Refresh classroom list
         } catch (error) {
             console.error('Error creating classroom:', error.response ? error.response.data : error.message);
+            setErrorMessage('Error creating classroom: ' + (error.response ? error.response.data.message : error.message));
         }
     };
 
@@ -64,18 +70,61 @@ const PrincipalView = () => {
             });
             setNewTeacherName('');
             setNewTeacherEmail('');
-            fetchTeachers(); // Refresh the list of teachers
+            fetchTeachers(); // Refresh teacher list
         } catch (error) {
-            console.error('Error creating teacher:', error.response ? error.response.data : error.message);
+            setErrorMessage('Error creating teacher: ' + (error.response ? error.response.data.message : error.message));
+        }
+    };
+
+    const handleCreateStudent = async () => {
+        try {
+            await axios.post('http://localhost:4000/api/students', {
+                name: newStudentName,
+                email: newStudentEmail
+            });
+            setNewStudentName('');
+            setNewStudentEmail('');
+            fetchStudents(); // Refresh student list
+        } catch (error) {
+            setErrorMessage('Error creating student: ' + (error.response ? error.response.data.message : error.message));
         }
     };
 
     const handleAssignClassroom = async () => {
         try {
-            await axios.put('http://localhost:4000/api/classrooms/assign', { teacherId: selectedTeacher, classroomId: selectedClassroom });
-            fetchTeachers();
+            console.log('Assigning classroom with teacherId:', selectedTeacher, 'and classroomId:', selectedClassroom);
+            const response = await axios.post('http://localhost:4000/api/classrooms/assign', {
+                teacherId: selectedTeacher,
+                classroomId: selectedClassroom
+            });
+    
+            if (response.status === 200) {
+                fetchClassrooms();
+                fetchTeachers();
+                alert('Teacher assigned to classroom successfully.');
+            }
         } catch (error) {
             console.error('Error assigning classroom:', error.response ? error.response.data : error.message);
+            alert('Failed to assign teacher: ' + (error.response ? error.response.data.message : error.message));
+        }
+    };
+
+    const handleAssignStudent = async () => {
+        try {
+            console.log('Assigning student with studentId:', selectedStudent, 'and teacherId:', selectedTeacher);
+            const response = await axios.post('http://localhost:4000/api/students/assign', {
+                studentId: selectedStudent,
+                teacherId: selectedTeacher
+            });
+    
+            if (response.status === 200) {
+                fetchStudents(); // Refresh student list
+                fetchTeachers(); // Refresh teacher list
+                alert('Student assigned to teacher successfully.');
+            }
+        } catch (error) {
+            console.error('Error assigning student:', error.response ? error.response.data : error.message);
+            alert('Failed to assign student: ' + (error.response ? error.response.data.message : error.message));
         }
     };
 
@@ -83,8 +132,9 @@ const PrincipalView = () => {
         try {
             await axios.put('http://localhost:4000/api/timetable', timetable);
             // Add appropriate feedback
+            alert('Timetable saved successfully.');
         } catch (error) {
-            console.error('Error editing timetable:', error.response ? error.response.data : error.message);
+            setErrorMessage('Error editing timetable: ' + (error.response ? error.response.data.message : error.message));
         }
     };
 
@@ -95,6 +145,12 @@ const PrincipalView = () => {
                 <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
                 <span className="relative text-black group-hover:text-white">Back to Home Page</span>
             </Link>
+
+            {errorMessage && (
+                <div className="p-4 mb-6 text-red-700 bg-red-100 border border-red-400 rounded">
+                    {errorMessage}
+                </div>
+            )}
 
             {/* Create Classroom */}
             <div className="mb-6">
@@ -139,6 +195,31 @@ const PrincipalView = () => {
                 </button>
             </div>
 
+            {/* Create Student */}
+            <div className="mb-6">
+                <h2 className="mb-4 text-2xl font-semibold">Create a Student</h2>
+                <input
+                    type="text"
+                    value={newStudentName}
+                    onChange={(e) => setNewStudentName(e.target.value)}
+                    placeholder="Student Name"
+                    className="px-4 py-2 border border-gray-300"
+                />
+                <input
+                    type="email"
+                    value={newStudentEmail}
+                    onChange={(e) => setNewStudentEmail(e.target.value)}
+                    placeholder="Student Email"
+                    className="px-4 py-2 ml-4 border border-gray-300"
+                />
+                <button
+                    onClick={handleCreateStudent}
+                    className="px-4 py-2 ml-4 text-white bg-blue-500 rounded hover:bg-blue-600"
+                >
+                    Create
+                </button>
+            </div>
+
             {/* Classrooms Table */}
             <div className="mb-6">
                 <h2 className="mb-4 text-2xl font-semibold">Classrooms</h2>
@@ -151,14 +232,18 @@ const PrincipalView = () => {
                     </thead>
                     <tbody>
                         {classrooms.length > 0 ? (
-                            classrooms.map(classroom => (
-                                <tr key={classroom._id}>
-                                    <td className="px-4 py-2 border">{classroom.name}</td>
-                                    <td className="px-4 py-2 border">
-                                        {classroom.teacher ? classroom.teacher.name : 'None'}
-                                    </td>
-                                </tr>
-                            ))
+                            classrooms.map(classroom => {
+                                // Find the teacher by ID, default to empty object if not found
+                                const teacher = teachers.find(t => t._id === classroom.teacher?._id) || {};
+                                return (
+                                    <tr key={classroom._id}>
+                                        <td className="px-4 py-2 border">{classroom.name}</td>
+                                        <td className="px-4 py-2 border">
+                                            {teacher.name || 'None'}
+                                        </td>
+                                    </tr>
+                                );
+                            })
                         ) : (
                             <tr>
                                 <td colSpan="2" className="px-4 py-2 text-center border">No classrooms found</td>
@@ -199,6 +284,37 @@ const PrincipalView = () => {
                 </button>
             </div>
 
+            {/* Assign Student */}
+            <div className="mb-6">
+                <h2 className="mb-4 text-2xl font-semibold">Assign Student to Teacher</h2>
+                <select
+                    value={selectedStudent}
+                    onChange={(e) => setSelectedStudent(e.target.value)}
+                    className="px-4 py-2 border border-gray-300"
+                >
+                    <option value="">Select Student</option>
+                    {students.map(student => (
+                        <option key={student._id} value={student._id}>{student.name}</option>
+                    ))}
+                </select>
+                <select
+                    value={selectedTeacher}
+                    onChange={(e) => setSelectedTeacher(e.target.value)}
+                    className="px-4 py-2 ml-4 border border-gray-300"
+                >
+                    <option value="">Select Teacher</option>
+                    {teachers.map(teacher => (
+                        <option key={teacher._id} value={teacher._id}>{teacher.name}</option>
+                    ))}
+                </select>
+                <button
+                    onClick={handleAssignStudent}
+                    className="px-4 py-2 ml-4 text-white bg-blue-500 rounded hover:bg-blue-600"
+                >
+                    Assign
+                </button>
+            </div>
+
             {/* Teachers Table */}
             <div className="mb-6">
                 <h2 className="mb-4 text-2xl font-semibold">Teachers</h2>
@@ -213,19 +329,23 @@ const PrincipalView = () => {
                     </thead>
                     <tbody>
                         {teachers.length > 0 ? (
-                            teachers.map(teacher => (
-                                <tr key={teacher._id}>
-                                    <td className="px-4 py-2 border">{teacher.name}</td>
-                                    <td className="px-4 py-2 border">{teacher.email}</td>
-                                    <td className="px-4 py-2 border">
-                                        {teacher.classroom ? teacher.classroom.name : 'None'}
-                                    </td>
-                                    <td className="px-4 py-2 border">
-                                        <button className="text-blue-500 hover:underline">Edit</button>
-                                        <button className="ml-2 text-red-500 hover:underline">Delete</button>
-                                    </td>
-                                </tr>
-                            ))
+                            teachers.map(teacher => {
+                                // Find the classroom by ID, default to empty object if not found
+                                const classroom = classrooms.find(c => c._id === teacher.classroom) || {};
+                                return (
+                                    <tr key={teacher._id}>
+                                        <td className="px-4 py-2 border">{teacher.name}</td>
+                                        <td className="px-4 py-2 border">{teacher.email}</td>
+                                        <td className="px-4 py-2 border">
+                                            {classroom.name || 'None'}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            <button className="text-blue-500 hover:underline">Edit</button>
+                                            <button className="ml-2 text-red-500 hover:underline">Delete</button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
                         ) : (
                             <tr>
                                 <td colSpan="4" className="px-4 py-2 text-center border">No teachers found</td>
@@ -236,9 +356,9 @@ const PrincipalView = () => {
             </div>
 
             {/* Students Table */}
-            <div>
+            <div className="mb-6">
                 <h2 className="mb-4 text-2xl font-semibold">Students</h2>
-                <table className="min-w-full border border-gray-300">
+                <table className="min-w-full mb-6 border border-gray-300">
                     <thead>
                         <tr>
                             <th className="px-4 py-2 border">Name</th>
@@ -249,19 +369,23 @@ const PrincipalView = () => {
                     </thead>
                     <tbody>
                         {students.length > 0 ? (
-                            students.map(student => (
-                                <tr key={student._id}>
-                                    <td className="px-4 py-2 border">{student.name}</td>
-                                    <td className="px-4 py-2 border">{student.email}</td>
-                                    <td className="px-4 py-2 border">
-                                        {student.classroom ? student.classroom.name : 'None'}
-                                    </td>
-                                    <td className="px-4 py-2 border">
-                                        <button className="text-blue-500 hover:underline">Edit</button>
-                                        <button className="ml-2 text-red-500 hover:underline">Delete</button>
-                                    </td>
-                                </tr>
-                            ))
+                            students.map(student => {
+                                // Find the classroom by ID, default to empty object if not found
+                                const classroom = classrooms.find(c => c._id === student.classroom) || {};
+                                return (
+                                    <tr key={student._id}>
+                                        <td className="px-4 py-2 border">{student.name}</td>
+                                        <td className="px-4 py-2 border">{student.email}</td>
+                                        <td className="px-4 py-2 border">
+                                            {classroom.name || 'None'}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            <button className="text-blue-500 hover:underline">Edit</button>
+                                            <button className="ml-2 text-red-500 hover:underline">Delete</button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
                         ) : (
                             <tr>
                                 <td colSpan="4" className="px-4 py-2 text-center border">No students found</td>
@@ -271,13 +395,13 @@ const PrincipalView = () => {
                 </table>
             </div>
 
-            {/* Timetable */}
-            <div>
+            {/* Timetable Editing (Optional) */}
+            <div className="mb-6">
                 <h2 className="mb-4 text-2xl font-semibold">Edit Timetable</h2>
-                {/* Timetable form or UI */}
+                {/* Add your timetable editing form here */}
                 <button
                     onClick={handleEditTimetable}
-                    className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
                     Save Timetable
                 </button>
