@@ -4,7 +4,7 @@ import 'dotenv/config';
 import { connectDB } from './src/config/db.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import timetableRoutes from './src/routes/timetableRoutes.js';
-import studentRoutes from './src/routes/studentsRoutes.js';
+import studentRoutes from './src/routes/studentsRoutes.js'; // Updated route import
 import teacherRoutes from './src/routes/teacherRoutes.js'; // Import teacher routes
 
 // App configuration

@@ -86,6 +86,7 @@ const PrincipalView = () => {
             setNewStudentEmail('');
             fetchStudents(); // Refresh student list
         } catch (error) {
+            console.error('Error creating student:', error);
             setErrorMessage('Error creating student: ' + (error.response ? error.response.data.message : error.message));
         }
     };
@@ -409,5 +410,4 @@ const PrincipalView = () => {
         </div>
     );
 };
-
 export default PrincipalView;
