@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import axios from 'axios'; // Assuming you're using axios for API calls
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const TeacherView = () => {
     const [students, setStudents] = useState([]);
-    const [timetable, setTimetable] = useState([]); // Initialize as an empty array
+    const [timetable, setTimetable] = useState([]);
     const [newTimetableEntry, setNewTimetableEntry] = useState({ day: '', time: '', subject: '' });
-    const [classroomId, setClassroomId] = useState(''); // Assuming classroom ID is known
 
     useEffect(() => {
-        // Fetch students and timetable for the classroom
         fetchStudents();
         fetchTimetable();
-    }, [classroomId]);
+    }, []);
 
     const fetchStudents = async () => {
         try {
-            const response = await axios.get(`/api/classrooms/${classroomId}/students`);
+            const response = await axios.get('http://localhost:4000/api/students');
             setStudents(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching students:', error);
@@ -25,7 +23,7 @@ const TeacherView = () => {
 
     const fetchTimetable = async () => {
         try {
-            const response = await axios.get(`/api/classrooms/${classroomId}/timetable`);
+            const response = await axios.get('http://localhost:4000/api/timetable');
             setTimetable(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching timetable:', error);
@@ -34,9 +32,10 @@ const TeacherView = () => {
 
     const handleCreateTimetable = async () => {
         try {
-            await axios.post(`/api/classrooms/${classroomId}/timetable`, newTimetableEntry);
+            const response = await axios.post('http://localhost:4000/api/timetable', newTimetableEntry);
+            console.log('Timetable entry created:', response.data);
             setNewTimetableEntry({ day: '', time: '', subject: '' });
-            fetchTimetable();
+            fetchTimetable(); // Refresh the timetable list
         } catch (error) {
             console.error('Error creating timetable entry:', error);
         }
@@ -63,7 +62,7 @@ const TeacherView = () => {
                     <tbody>
                         {students.length > 0 ? (
                             students.map(student => (
-                                <tr key={student.id}>
+                                <tr key={student._id}>
                                     <td className="px-4 py-2 border">{student.name}</td>
                                     <td className="px-4 py-2 border">{student.email}</td>
                                 </tr>
@@ -122,8 +121,8 @@ const TeacherView = () => {
                     </thead>
                     <tbody>
                         {timetable.length > 0 ? (
-                            timetable.map((entry, index) => (
-                                <tr key={index}>
+                            timetable.map((entry) => (
+                                <tr key={entry._id}>
                                     <td className="px-4 py-2 border">{entry.day}</td>
                                     <td className="px-4 py-2 border">{entry.time}</td>
                                     <td className="px-4 py-2 border">{entry.subject}</td>

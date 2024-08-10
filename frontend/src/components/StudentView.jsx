@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import axios from 'axios'; // Assuming you're using axios for API calls
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const StudentView = () => {
     const [students, setStudents] = useState([]);
-    const [timetable, setTimetable] = useState([]); // Initialize as an empty array
-    const [classroomId, setClassroomId] = useState(''); // Assuming classroom ID is known
+    const [timetable, setTimetable] = useState([]);
 
     useEffect(() => {
-        // Fetch students and timetable for the classroom
+        // Fetch students and timetable on component mount
         fetchStudents();
         fetchTimetable();
-    }, [classroomId]);
+    }, []);
 
     const fetchStudents = async () => {
         try {
-            const response = await axios.get(`/api/classrooms/${classroomId}/students`);
+            const response = await axios.get('http://localhost:4000/api/students'); // Updated to match your route
             setStudents(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching students:', error);
@@ -24,7 +23,7 @@ const StudentView = () => {
 
     const fetchTimetable = async () => {
         try {
-            const response = await axios.get(`/api/classrooms/${classroomId}/timetable`);
+            const response = await axios.get('http://localhost:4000/api/timetable'); // Updated to match your route
             setTimetable(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching timetable:', error);
@@ -52,7 +51,7 @@ const StudentView = () => {
                     <tbody>
                         {students.length > 0 ? (
                             students.map(student => (
-                                <tr key={student.id}>
+                                <tr key={student._id}>
                                     <td className="px-4 py-2 border">{student.name}</td>
                                     <td className="px-4 py-2 border">{student.email}</td>
                                 </tr>
@@ -66,7 +65,7 @@ const StudentView = () => {
                 </table>
             </div>
 
-            {/* Timetable Management (Optional) */}
+            {/* Timetable Display */}
             <div>
                 <h2 className="mb-4 text-2xl font-semibold">Classroom Timetable</h2>
                 <table className="min-w-full border border-gray-300">
@@ -79,8 +78,8 @@ const StudentView = () => {
                     </thead>
                     <tbody>
                         {timetable.length > 0 ? (
-                            timetable.map((entry, index) => (
-                                <tr key={index}>
+                            timetable.map((entry) => (
+                                <tr key={entry._id}>
                                     <td className="px-4 py-2 border">{entry.day}</td>
                                     <td className="px-4 py-2 border">{entry.time}</td>
                                     <td className="px-4 py-2 border">{entry.subject}</td>

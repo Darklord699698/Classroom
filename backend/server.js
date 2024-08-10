@@ -4,8 +4,8 @@ import 'dotenv/config';
 import { connectDB } from './src/config/db.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import timetableRoutes from './src/routes/timetableRoutes.js';
-import studentRoutes from './src/routes/studentsRoutes.js'; // Updated route import
-import teacherRoutes from './src/routes/teacherRoutes.js'; // Import teacher routes
+import studentRoutes from './src/routes/studentsRoutes.js';
+import teacherRoutes from './src/routes/teacherRoutes.js';
 
 // App configuration
 const app = express();
@@ -24,10 +24,10 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api/classrooms', classroomRoutes); // Route for classroom operations
-app.use('/api/timetable', timetableRoutes); // Route for timetable operations
-app.use('/api/students', studentRoutes); // Route for student operations
-app.use('/api/teachers', teacherRoutes); // Route for teacher operations
+app.use('/api/classrooms', classroomRoutes); // Classroom operations
+app.use('/api/timetable', timetableRoutes);  // Timetable operations
+app.use('/api/students', studentRoutes);      // Student operations
+app.use('/api/teachers', teacherRoutes);      // Teacher operations
 
 // 404 Handler for unknown routes
 app.use((req, res, next) => {

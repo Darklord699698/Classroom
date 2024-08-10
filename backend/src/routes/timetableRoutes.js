@@ -1,8 +1,19 @@
+// src/routes/timetableRoutes.js
 import express from 'express';
-import { saveTimetable } from '../controllers/timetableController.js';
+import { 
+    createTimetable, 
+    getAllTimetables, 
+    getTimetableById, 
+    updateTimetable, 
+    deleteTimetable 
+} from '../controllers/timetableController.js';
 
 const router = express.Router();
 
-router.put('/', saveTimetable);
+router.post('/', createTimetable);
+router.get('/', getAllTimetables);
+router.get('/:id', getTimetableById);
+router.put('/:id', updateTimetable);
+router.delete('/:id', deleteTimetable);
 
 export default router;

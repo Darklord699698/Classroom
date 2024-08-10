@@ -1,14 +1,19 @@
+// src/models/timetable.js
 import mongoose from 'mongoose';
 
 const timetableSchema = new mongoose.Schema({
-    classroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Classroom', required: true },
-    schedule: {
-        Monday: { type: String, default: '' },
-        Tuesday: { type: String, default: '' },
-        Wednesday: { type: String, default: '' },
-        Thursday: { type: String, default: '' },
-        Friday: { type: String, default: '' },
+    day: {
+        type: String,
+        required: true,
     },
-});
+    time: {
+        type: String,
+        required: true,
+    },
+    subject: {
+        type: String,
+        required: true,
+    }
+}, { timestamps: true });
 
-export const Timetable = mongoose.model('Timetable', timetableSchema);
+export default mongoose.model('Timetable', timetableSchema);
