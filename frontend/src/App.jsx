@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Content from './components/Content';
 import About from './components/About';
 import PrincipalView from './components/Principalview';
 import TeacherView from './components/Teacherview';
@@ -12,6 +11,7 @@ import Pages from './components/Pages';
 import Contact from './components/Contact';
 import Login from './components/Login';
 import Register from './components/Register';
+import Content from './components/Content'
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
