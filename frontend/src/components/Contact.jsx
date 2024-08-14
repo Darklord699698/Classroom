@@ -23,7 +23,7 @@ const Contact = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:4000/api/contact', formData);
+            const response = await axios.post('https://classroom-nbzw.onrender.com/api/contact', formData);
             setStatus('Form submitted successfully!');
             setFormData({
                 name: '',
