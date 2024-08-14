@@ -11,7 +11,7 @@ const Login = ({ setIsLoggedIn }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:4000/api/auth/login', { email, password });
+            const response = await axios.post('https://classroom-nbzw.onrender.com/api/auth/login', { email, password });
             
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token); // Store token
