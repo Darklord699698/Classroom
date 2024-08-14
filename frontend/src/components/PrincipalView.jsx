@@ -27,7 +27,7 @@ const PrincipalView = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get("https://classroom-nbzw.onrender.com");
+      const response = await axios.get("http://localhost:4000/api/teachers");
       setTeachers(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching teachers:", error);
