@@ -4,7 +4,7 @@ import StyledButton from "./StyledButton";
 import Lottie from 'react-lottie';
 import animationData1 from '../assets/animation1.json'; // Adjust path as necessary
 
-const Content = () => {
+const content = () => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -51,4 +51,4 @@ const Content = () => {
   );
 };
 
-export default Content;
+export default content;
