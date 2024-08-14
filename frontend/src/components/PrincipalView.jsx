@@ -36,7 +36,7 @@ const PrincipalView = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get("https://classroom-nbzw.onrender.com");
+      const response = await axios.get("http://localhost:4000/api/students");
       setStudents(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -45,7 +45,7 @@ const PrincipalView = () => {
 
   const fetchClassrooms = async () => {
     try {
-      const response = await axios.get("https://classroom-nbzw.onrender.com");
+      const response = await axios.get("http://localhost:4000/api/students");
       setClassrooms(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching classrooms:", error);
@@ -56,7 +56,7 @@ const PrincipalView = () => {
     try {
       console.log("Creating classroom with name:", newClassroomName); // Log payload
       const response = await axios.post(
-        "https://classroom-nbzw.onrender.com",
+        "http://localhost:4000/api/classrooms",
         { name: newClassroomName }
       );
       setNewClassroomName("");
@@ -75,7 +75,7 @@ const PrincipalView = () => {
 
   const handleCreateTeacher = async () => {
     try {
-      await axios.post("https://classroom-nbzw.onrender.com", {
+      await axios.post("http://localhost:4000/api/teachers", {
         name: newTeacherName,
         email: newTeacherEmail,
       });
@@ -92,7 +92,7 @@ const PrincipalView = () => {
 
   const handleCreateStudent = async () => {
     try {
-      await axios.post("https://classroom-nbzw.onrender.com", {
+      await axios.post("http://localhost:4000/api/students", {
         name: newStudentName,
         email: newStudentEmail,
       });
@@ -117,7 +117,7 @@ const PrincipalView = () => {
         selectedClassroom
       );
       const response = await axios.post(
-        "https://classroom-nbzw.onrender.com",
+        "http://localhost:4000/api/classrooms/assign",
         {
           teacherId: selectedTeacher,
           classroomId: selectedClassroom,
@@ -142,7 +142,7 @@ const PrincipalView = () => {
   const handleAssignStudent = async () => {
     try {
       const response = await axios.post(
-        "https://classroom-nbzw.onrender.com",
+        "http://localhost:4000/api/students/assign",
         {
           studentId: selectedStudent,
           teacherId: selectedTeacher,
@@ -168,7 +168,7 @@ const PrincipalView = () => {
     if (editingTeacher) {
       try {
         await axios.put(
-          `https://classroom-nbzw.onrender.com/${editingTeacher._id}`,
+          `http://localhost:4000/api/teachers/${editingTeacher._id}`,
           {
             name: editingTeacher.name,
             email: editingTeacher.email,
@@ -190,7 +190,7 @@ const PrincipalView = () => {
     if (editingStudent) {
       try {
         await axios.put(
-          `https://classroom-nbzw.onrender.com/${editingStudent._id}`,
+          `http://localhost:4000/api/students/${editingStudent._id}`,
           {
             name: editingStudent.name,
             email: editingStudent.email,
@@ -210,7 +210,7 @@ const PrincipalView = () => {
 
   const handleDeleteTeacher = async (id) => {
     try {
-      await axios.delete(`https://classroom-nbzw.onrender.com/${id}`);
+      await axios.delete(`http://localhost:4000/api/teachers/${id}`);
       fetchTeachers(); // Refresh teacher list
       alert("Teacher deleted successfully.");
     } catch (error) {
@@ -224,7 +224,7 @@ const PrincipalView = () => {
 
   const handleDeleteStudent = async (id) => {
     try {
-      await axios.delete(`https://classroom-nbzw.onrender.com/${id}`);
+      await axios.delete(`http://localhost:4000/api/students/${id}`);
       fetchStudents(); // Refresh student list
       alert("Student deleted successfully.");
     } catch (error) {
