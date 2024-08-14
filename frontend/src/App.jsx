@@ -11,7 +11,7 @@ import Pages from './components/Pages';
 import Contact from './components/Contact';
 import Login from './components/Login';
 import Register from './components/Register';
-import Content from './components/Content'
+import content from './components/content'
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,7 +22,7 @@ const App = () => {
                 <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
                 <main className="flex-grow">
                     <Routes>
-                        <Route path="/" element={<Content />} />
+                        <Route path="/" element={<content />} />
                         <Route path="/principal" element={<PrincipalView />} />
                         <Route path="/teacher" element={<TeacherView />} />
                         <Route path="/student" element={<StudentView />} />
