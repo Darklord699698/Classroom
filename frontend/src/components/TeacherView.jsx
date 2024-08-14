@@ -14,7 +14,7 @@ const TeacherView = () => {
 
     const fetchStudents = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/students');
+            const response = await axios.get('https://classroom-nbzw.onrender.com');
             setStudents(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching students:', error);
@@ -23,7 +23,7 @@ const TeacherView = () => {
 
     const fetchTimetable = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/timetable');
+            const response = await axios.get('https://classroom-nbzw.onrender.com');
             setTimetable(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching timetable:', error);
@@ -32,7 +32,7 @@ const TeacherView = () => {
 
     const handleCreateTimetable = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/timetable', newTimetableEntry);
+            const response = await axios.post('https://classroom-nbzw.onrender.com', newTimetableEntry);
             console.log('Timetable entry created:', response.data);
             setNewTimetableEntry({ day: '', time: '', subject: '' });
             fetchTimetable(); // Refresh the timetable list
