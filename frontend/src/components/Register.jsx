@@ -10,7 +10,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:4000/api/auth/register', { email, password, role });
+            await axios.post('https://classroom-nbzw.onrender.com', { email, password, role });
             setMessage('User registered successfully');
             setEmail('');
             setPassword('');
