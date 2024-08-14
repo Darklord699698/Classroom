@@ -14,7 +14,7 @@ const StudentView = () => {
 
     const fetchStudents = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/students'); // Updated to match your route
+            const response = await axios.get('https://classroom-nbzw.onrender.com/api/students'); // Updated to match your route
             setStudents(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching students:', error);
@@ -23,7 +23,7 @@ const StudentView = () => {
 
     const fetchTimetable = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/timetable'); // Updated to match your route
+            const response = await axios.get('https://classroom-nbzw.onrender.com/api/timetable'); // Updated to match your route
             setTimetable(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching timetable:', error);
