@@ -1,5 +1,5 @@
 // src/controllers/timetableController.js
-import Timetable from '../models/timetable.js';
+import Timetable from '../models/Timetable.js';
 
 // Create a new timetable entry
 export const createTimetable = async (req, res) => {
