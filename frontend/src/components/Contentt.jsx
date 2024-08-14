@@ -4,7 +4,7 @@ import StyledButton from "./StyledButton";
 import Lottie from 'react-lottie';
 import animationData1 from '../assets/animation1.json'; // Adjust path as necessary
 
-const content = () => {
+const Contentt = () => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -17,7 +17,7 @@ const content = () => {
   return (
     <section
       className="relative h-screen text-white bg-center bg-cover"
-      style={{ backgroundImage: `url('../assets/degree.jpg')` }}
+      style={{ backgroundImage: `url(${assets.degree})` }}
     >
       <div className="absolute inset-0 flex flex-col items-start justify-center px-8 py-12 bg-black bg-opacity-50">
         <div className="max-w-lg pl-8">
@@ -51,4 +51,4 @@ const content = () => {
   );
 };
 
-export default content;
+export default Contentt;
