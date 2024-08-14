@@ -17,7 +17,7 @@ const content = () => {
   return (
     <section
       className="relative h-screen text-white bg-center bg-cover"
-      style={{ backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUlILKij2_EH3kPK_XKUDxQLhX2lk4-bAhzQ&s)` }}
+      style={{ backgroundImage: `url(${assets.degree})` }}
     >
       <div className="absolute inset-0 flex flex-col items-start justify-center px-8 py-12 bg-black bg-opacity-50">
         <div className="max-w-lg pl-8">
