@@ -45,7 +45,7 @@ const PrincipalView = () => {
 
   const fetchClassrooms = async () => {
     try {
-      const response = await axios.get("https://classroom-nbzw.onrender.com/api/students");
+      const response = await axios.get("https://classroom-nbzw.onrender.com/api/classrooms");
       setClassrooms(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching classrooms:", error);
